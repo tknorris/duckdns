@@ -1,7 +1,7 @@
 duckdns
 =======
 
-Create a file called "duckdns.cfg" that contains your DOMAINS and TOKEN. For example:
+Create a file called "duckdns.cfg" in the same directory as duckdns_upd_ip.sh that contains your DOMAINS and TOKEN. For example:
 
 #duckdns.cfg
 DOMAINS="example1,example2"
