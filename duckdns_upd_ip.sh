@@ -1,13 +1,14 @@
 #!/bin/bash
-. duckdns.cfg
+BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+. "$BASEPATH/duckdns.cfg"
 
 DOMAINS=${DOMAINS//[[:space:]]/}
-[ -z $DOMAINS ] && echo "Domains is Blank" && exit
+[ -z $DOMAINS ] && log "DOMAINS is Blank" && exit
 TOKEN=${TOKEN//[[:space:]]/}
-[ -z $TOKEN ] && echo "Token Is Blank" && exit
+[ -z $TOKEN ] && log "TOKEN Is Blank" && exit
 
 MAXRETRIES=2
-BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LASTFILE="$BASEPATH/lastip"
 # Additional methods names added to this array will get randomly chosen
 METHODS=("curl_method" "curl_method" "curl_method" "dig_method" "dyndns_method" "ipapi_method")
