@@ -1,4 +1,4 @@
-duckdns
+DuckDNS IP Updater
 =======
 
 Create a file called "duckdns.cfg" in the same directory as duckdns_upd_ip.sh that contains your DOMAINS and TOKEN. For example:
