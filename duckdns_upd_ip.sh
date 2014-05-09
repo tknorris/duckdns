@@ -21,7 +21,7 @@ log () {
 
 set_http_fetch () {
     local com_str
-    com_str=$(command -v crurl)
+    com_str=$(command -v curl)
     if [ $? -eq 0 ]; then
         echo "$com_str -s"
     else 
