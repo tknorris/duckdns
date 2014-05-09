@@ -1,13 +1,12 @@
 #!/bin/bash
 BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-
 . "$BASEPATH/duckdns.cfg"
 
 DOMAINS=${DOMAINS//[[:space:]]/}
 [ -z $DOMAINS ] && log "DOMAINS is Blank" && exit
 TOKEN=${TOKEN//[[:space:]]/}
-[ -z $TOKEN ] && log "TOKEN Is Blank" && exit
+[ -z $TOKEN ] && log "TOKEN is Blank" && exit
 
 MAXRETRIES=2
 LASTFILE="$BASEPATH/lastip"
