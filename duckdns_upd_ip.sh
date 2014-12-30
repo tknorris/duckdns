@@ -2,7 +2,7 @@
 BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$BASEPATH/duckdns.cfg"
 
-[ -z $NO_CERT] && NO_CERT=0
+[ -z $NO_CERT ] && NO_CERT=0
 [ -z $MAXRETRIES ] && MAXRETRIES=0
 
 DOMAINS=${DOMAINS//[[:space:]]/}
