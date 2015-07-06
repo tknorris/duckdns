@@ -17,9 +17,9 @@ LASTFILE="$BASEPATH/lastip"
 METHODS=("http_method" "http_method" "http_method" "dig_method" "dyndns_method" "ipapi_method")
 # Additional hostnames added to this array will get randomly chosen in the http_method
 HTTP_SERVICES=( \
-    "ifconfig.me/ip" "ipecho.net/plain" "ipv4.icanhazip.com" "curlmyip.com" \
+    "ifcfg.me" "ipecho.net/plain" "ipv4.icanhazip.com" "whatismyip.akamai.com" \
     "v4.ident.me" "ipinfo.io/ip" "bot.whatismyipaddress.com" "ip4.telize.com" \
-    "echoip.com" )
+    "tnx.nl/ip" "ip.tyk.nu" "ipof.in/txt" "l2.io/ip" "corz.org/ip" "wgetip.com")
 
 log () {
     NOW=$(date +"%x %X")
