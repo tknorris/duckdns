@@ -30,7 +30,7 @@ set_http_fetch () {
     local com_str
     com_str=$(command -v curl)
     if [ $? -eq 0 ]; then
-        com_str="$com_str -s"
+        com_str="$com_str -s -L"
         [ "$NO_CERT" -eq 1 ] && com_str="$com_str -k"
     else 
         com_str=$(command -v wget)
