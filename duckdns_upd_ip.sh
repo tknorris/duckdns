@@ -1,26 +1,4 @@
 #!/bin/bash
-BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-. "$BASEPATH/duckdns.cfg"
-
-[ -z $NO_CERT ] && NO_CERT=0
-[ -z $MAXRETRIES ] && MAXRETRIES=0
-
-DOMAINS=${DOMAINS//[[:space:]]/}
-[ -z $DOMAINS ] && log "DOMAINS is Blank" && exit 1
-
-TOKEN=${TOKEN//[[:space:]]/}
-[ -z $TOKEN ] && log "TOKEN is Blank" && exit 1
-
-LASTFILE="$BASEPATH/lastip"
-
-# Additional methods names added to this array will get randomly chosen
-METHODS=("http_method" "http_method" "http_method" "dig_method" "dyndns_method" "ipapi_method")
-# Additional hostnames added to this array will get randomly chosen in the http_method
-HTTP_SERVICES=( \
-    "ifcfg.me" "ipecho.net/plain" "ipv4.icanhazip.com" "whatismyip.akamai.com" \
-    "v4.ident.me" "ipinfo.io/ip" "bot.whatismyipaddress.com" "ip4.telize.com" \
-    "tnx.nl/ip" "ip.tyk.nu" "ipof.in/txt" "l2.io/ip" "corz.org/ip" "wgetip.com")
-
 log () {
     NOW=$(date +"%x %X")
     echo "[$NOW] $1"
@@ -32,7 +10,7 @@ set_http_fetch () {
     if [ $? -eq 0 ]; then
         com_str="$com_str -s -L"
         [ "$NO_CERT" -eq 1 ] && com_str="$com_str -k"
-    else 
+    else
         com_str=$(command -v wget)
         if [ $? -eq 0 ]; then
             com_str="$com_str -q -O -"
@@ -58,12 +36,35 @@ dig_method () {
 }
 
 dyndns_method () {
-    $HTTP_FETCH "checkip.dyndns.org" | sed -n 's/.*IP Address: \([[:digit:]\.]\+\).*/\1/p'
+    $HTTP_FETCH "checkip.dyndns.org" | sed -nE 's/.*IP Address: ([[:digit:].]+).*/\1/p'
 }
 
 ipapi_method () {
     $HTTP_FETCH "http://ip-api.com/line" | tail -1
 }
+
+BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. "$BASEPATH/duckdns.cfg"
+
+[ -z $NO_CERT ] && NO_CERT=0
+[ -z $MAXRETRIES ] && MAXRETRIES=0
+
+DOMAINS=${DOMAINS//[[:space:]]/}
+[ -z $DOMAINS ] && log "DOMAINS is Blank" && exit 1
+
+TOKEN=${TOKEN//[[:space:]]/}
+[ -z $TOKEN ] && log "TOKEN is Blank" && exit 1
+
+LASTFILE="$BASEPATH/lastip"
+
+# Additional methods names added to this array will get randomly chosen
+METHODS=("http_method" "http_method" "http_method" "dig_method" "dyndns_method" "ipapi_method")
+
+# Additional hostnames added to this array will get randomly chosen in the http_method
+HTTP_SERVICES=( \
+    "ifconfig.co" "ipecho.net/plain" "ipv4.icanhazip.com" "whatismyip.akamai.com" \
+    "v4.ident.me" "ipinfo.io/ip" "bot.whatismyipaddress.com" "www.trackip.net/ip" \
+    "tnx.nl/ip" "ip.tyk.nu" "api.ipify.org" "l2.io/ip" "myexternalip.com/raw" "wgetip.com")
 
 HTTP_FETCH=$(set_http_fetch)
 
@@ -93,7 +94,7 @@ done
 
 if [ "$LASTIP" != "$IP" ]; then
     log "Updating IP to $IP"
-    url="https://www.duckdns.org/update?domains=$DOMAINS&token=$TOKEN&ip=" 
+    url="https://www.duckdns.org/update?domains=$DOMAINS&token=$TOKEN&ip="
     response=$($HTTP_FETCH "$url")
     log "$response"
     echo "$IP" > "$LASTFILE"
