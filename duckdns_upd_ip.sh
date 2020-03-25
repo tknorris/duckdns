@@ -63,7 +63,7 @@ METHODS=("http_method" "http_method" "http_method" "dig_method" "dyndns_method" 
 # Additional hostnames added to this array will get randomly chosen in the http_method
 HTTP_SERVICES=( \
     "ifconfig.co" "ipecho.net/plain" "ipv4.icanhazip.com" "whatismyip.akamai.com" \
-    "v4.ident.me" "ipinfo.io/ip" "bot.whatismyipaddress.com" "www.trackip.net/ip" \
+    "v4.ident.me" "ipinfo.io/ip" "66.171.248.178" "www.trackip.net/ip" \
     "tnx.nl/ip" "ip.tyk.nu" "api.ipify.org" "l2.io/ip" "myexternalip.com/raw" "wgetip.com")
 
 HTTP_FETCH=$(set_http_fetch)
@@ -73,10 +73,17 @@ LASTIP=""
 
 IP=""
 try=1
-while [ "$IP" == "" ]; do
+while [[ "$IP" == "" || "$IP" == "GARBAGE" ]]; do
     PICK=$(( $RANDOM % ${#METHODS[@]} ))
     IP=$(${METHODS[$PICK]})
     curl_pick=$?
+
+    if ! [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+        if [[ ${#IP} -lt 50 ]]; then
+            log "Actual Response: |$IP|"
+        fi
+        IP="GARBAGE"
+    fi
 
     message="Try #$try: Got $IP from ${METHODS[$PICK]}"
     if [ "${METHODS[$PICK]}" == "http_method" ]; then
