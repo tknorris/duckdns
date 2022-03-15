@@ -63,8 +63,8 @@ METHODS=("http_method" "http_method" "http_method" "dig_method" "dyndns_method" 
 # Additional hostnames added to this array will get randomly chosen in the http_method
 HTTP_SERVICES=( \
     "ifconfig.co" "ipecho.net/plain" "ipv4.icanhazip.com" "whatismyip.akamai.com" \
-    "v4.ident.me" "ipinfo.io/ip" "66.171.248.178" "www.trackip.net/ip" \
-    "tnx.nl/ip" "ip.tyk.nu" "api.ipify.org" "l2.io/ip" "myexternalip.com/raw" "wgetip.com")
+    "v4.ident.me" "ipinfo.io/ip" "www.trackip.net/ip" \
+    "tnx.nl/ip" "ip.tyk.nu" "api.ipify.org" "myexternalip.com/raw" "wgetip.com")
 
 HTTP_FETCH=$(set_http_fetch)
 
@@ -99,7 +99,9 @@ while [[ "$IP" == "" || "$IP" == "GARBAGE" ]]; do
     (( ++try ))
 done
 
-if [ "$LASTIP" != "$IP" ]; then
+if [ "$IP" == "GARBAGE" ]; then
+    log "Skipping update got only garbage"
+elif [ "$LASTIP" != "$IP" ]; then
     log "Updating IP to $IP"
     url="https://www.duckdns.org/update?domains=$DOMAINS&token=$TOKEN&ip="
     response=$($HTTP_FETCH "$url")
